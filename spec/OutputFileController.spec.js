@@ -1,56 +1,46 @@
-describe("When creating the Output file", function() {
-  var employee;
-  
-	beforeEach(function() {
-		employee = {
-			firstName: 'David',
-			lastName: 'Rudd',
-			annualSalary: 60050,
-			superRate: '9%',
-			payPeriod: '01 March - 31 March',
-			grossIncome: 5004,
-			incomeTax: 922,
-			netIncome: 4082,
-			superMonthly: 450			
-		};
-	});
-	
-	afterEach(function() {
-		employeeData = undefined;
-	});
-	
-	it("it must call to convertToCSVFile", function() {
-		var convertToCSVFileSpy = spyOn(window, 'convertToCSVFile');
-		spyOn(window, 'createDownloadLink');
-		createOutputData(employee);
-		expect(convertToCSVFileSpy).toHaveBeenCalled();
+/**
+ * Created by Isabel on 26/02/2016.
+ */
+describe("When loading and parsing input file", function() {
+	describe("When opening file", function() {
+		/*it("the file must call parseFile", function() {
+
+		 });*/
 	});
 
-	it("it must call to createDownloadLink", function() {
-		var createDownloadLinkSpy = spyOn(window, 'createDownloadLink');
-		spyOn(window, 'convertToCSVFile');
-		createOutputData(employee);
-		expect(createDownloadLinkSpy).toHaveBeenCalled();
-	});
+	describe("When parsing file", function() {
+		var text;
 
-	it("the output data must be correct", function() {
-		var expectedOutput;
-		expectedOutput = 'David Rudd,01 March - 31 March,5004,922,4082,450';
-		employeeData = [
-					employee
-				];
-		expect(convertToCSVFile()).toBe(expectedOutput.concat('\n'));
-	});
+		beforeEach(function() {
+			spyOn(window, 'calculatePayslip');
+		});
 
-	it("must get the correct full name of the employee", function() {
-		var expectedFullName,
-			calculatedFullName;
-			
-		expectedFullName = 'David Rudd';
-		
-		calculatedFullName = getFullName(employee);
-		
-		expect(calculatedFullName).toBe(expectedFullName);
+		afterEach(function() {
+			employeeData = undefined;
+		});
+
+		it("the code must be properly parsed if the text is correct", function() {
+			text = 'David,Rudd,60050,9%,01 March – 31 March\nRyan,Chen,120000,10%,01 March – 31 March';
+			parseFile(text);
+			expect(employeeData.length).toEqual(2);
+		});
+
+		it("the code must be properly parsed if the text has an empty line between records", function() {
+			text = 'David,Rudd,60050,9%,01 March – 31 March\n\nRyan,Chen,120000,10%,01 March – 31 March';
+			parseFile(text);
+			expect(employeeData.length).toEqual(2);
+		});
+
+		it("the code must be properly parsed if the text has an empty line as first record", function() {
+			text = '\nDavid,Rudd,60050,9%,01 March – 31 March\nRyan,Chen,120000,10%,01 March – 31 March';
+			parseFile(text);
+			expect(employeeData.length).toEqual(2);
+		});
+
+		it("the code must be properly parsed if the text has an empty line as last record", function() {
+			text = 'David,Rudd,60050,9%,01 March – 31 March\nRyan,Chen,120000,10%,01 March – 31 March\n';
+			parseFile(text);
+			expect(employeeData.length).toEqual(2);
+		});
 	});
 });
-
