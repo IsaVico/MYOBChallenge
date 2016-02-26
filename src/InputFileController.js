@@ -13,17 +13,21 @@ function openFile(event){
 
 function parseFile(text){
     var record,
-        i,
+        indexRecord,
+		indexEmployee,
 		fields;
 
     employeeData = [];
     record = text.split("\n");
-
-    for(i= 0; i< record.length; i++){
-		fields = record[i].split(',');
+	indexEmployee = 0;
+	
+    for(indexRecord= 0; indexRecord< record.length; indexRecord++){
+		fields = record[indexRecord].split(',');
 		if(fields[0].length > 0) {
-			employeeData[i] = prepareEmployeeData(fields);
+			employeeData[indexEmployee] = prepareEmployeeData(fields);
+			indexEmployee++;
 		}
     }
+	
     calculatePayslip(employeeData);
 }

@@ -1,17 +1,41 @@
 var employeeData;
 
 function prepareEmployeeData(fields){
-    return {
-        firstName: fields[0],
-        lastName: fields[1],
-        annualSalary: fields[2],
-        superRate: fields[3],
-        payPeriod: fields[4].replace(/\r?\n?[^\r\n]*$/, ""),
-        grossIncome: undefined,
-        incomeTax: undefined,
-        netIncome: undefined,
-        superMonthly: undefined
-    };
+	var employee;
+		if(allMandatoryDataFilled(fields))
+		{
+			employee = {
+				firstName: fields[0],
+				lastName: fields[1],
+				annualSalary: fields[2],
+				superRate: fields[3],
+				payPeriod: fields[4].replace('\n', ''),
+				grossIncome: undefined,
+				incomeTax: undefined,
+				netIncome: undefined,
+				superMonthly: undefined
+			};
+		} else {
+			employee = {
+				firstName: 'This employee have not all the mandatory data filled. The operations cannot be done',
+				lastName: undefined,
+				annualSalary: undefined,
+				superRate: undefined,
+				payPeriod: undefined,
+				grossIncome: undefined,
+				incomeTax: undefined,
+				netIncome: undefined,
+				superMonthly: undefined
+			}
+		}
+	return employee;
+}
+
+function allMandatoryDataFilled(fields) {
+	if(fields[2].length > 0 && fields[3].length > 0 && fields[3].length > 0) {
+				return true;
+			}
+	return false;
 }
 
 function calculatePayslip(employeeList) {
@@ -21,13 +45,19 @@ function calculatePayslip(employeeList) {
 	employeeData = employeeList;
 	
     for(i=0; i< employeeData.length; i++) {
+		if(isValidEmployee(employeeData[i])){
         currentEmployee = employeeData[i];
         currentEmployee.grossIncome = Math.round(currentEmployee.annualSalary/12);
         currentEmployee.superMonthly = Math.round(calculateSuper(currentEmployee));
         currentEmployee.incomeTax = Math.round(calculateTaxes(currentEmployee));
         currentEmployee.netIncome = calculateNetIncome(currentEmployee);
-    }
+		}
+	}
 	createOutputData(employeeData);
+}
+
+function isValidEmployee(employee){
+	return employee.lastName != undefined;
 }
 
 /**
@@ -45,27 +75,11 @@ function calculateSuper(employee){
  * @returns Return the amount of taxes that the user needs to pay per month.
  */
 function calculateTaxes(employee) {
-    return getTaxes(employee.annualSalary);
-}
+    var taxAmount,
+	annualSalary;
 
-/**
- * @private
- * Calculates the net income which is the result of subtract to the gross monthly income the monthly taxes.
- * @returns Return the super rate amount per month.
- */
-function calculateNetIncome(employee) {
-    return employee.grossIncome - employee.incomeTax;
-}
-
-/**
- * @private
- * Get the taxes for every range of salaries based on the ATO Table
- * @param {Integer} annualSalary Annual salary filled by the user, used as the base of the calculation for the taxes
- * @returns {Integer} Returns the monthly amount of the taxes.
- */
-function getTaxes(annualSalary){
-    var taxAmount;
-
+	annualSalary = employee.annualSalary;
+	
     switch (true) {
         case (annualSalary > 180001):
             taxAmount = (54547 + (annualSalary - 180000)*0.45)/12;
@@ -80,9 +94,19 @@ function getTaxes(annualSalary){
             taxAmount = ((annualSalary - 18200)*0.19)/12;
             break;
         default:
-            taxAmount = annualSalary/12;
+            taxAmount = 00;
             break;
     }
 
     return taxAmount;
 }
+
+/**
+ * @private
+ * Calculates the net income which is the result of subtract to the gross monthly income the monthly taxes.
+ * @returns Return the super rate amount per month.
+ */
+function calculateNetIncome(employee) {
+    return employee.grossIncome - employee.incomeTax;
+}
+
