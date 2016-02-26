@@ -44,7 +44,7 @@ function calculatePayslip(employeeList) {
 	for(i=0; i< employeeData.length; i++) {
 		if(isValidEmployee(employeeData[i])){
 			currentEmployee = employeeData[i];
-			currentEmployee.grossIncome = Math.round(currentEmployee.annualSalary/12);
+			currentEmployee.grossIncome = Math.round(currentEmployee.annualSalary/periodicMonths);
 			currentEmployee.superMonthly = Math.round(calculateSuper(currentEmployee));
 			currentEmployee.incomeTax = Math.round(calculateTaxes(currentEmployee));
 			currentEmployee.netIncome = calculateNetIncome(currentEmployee);
@@ -78,24 +78,28 @@ function calculateTaxes(employee) {
 	annualSalary = employee.annualSalary;
 
 	switch (true) {
-		case (annualSalary > 180001):
-			taxAmount = (54547 + (annualSalary - 180000)*0.45)/12;
-			break;
-		case (annualSalary > 80001 && annualSalary <= 180000):
-			taxAmount = (17547 + (annualSalary - 80000)*0.37)/12;
-			break;
-		case (annualSalary > 37001 && annualSalary <= 80000):
-			taxAmount = (3572 + (annualSalary - 37000)*0.325)/12;
-			break;
-		case (annualSalary > 18200 && annualSalary <= 37000):
-			taxAmount = ((annualSalary - 18200)*0.19)/12;
-			break;
-		default:
-			taxAmount = 0;
-			break;
-	}
+		case (annualSalary > (taxableIncome.highSalary + 1)):
+				taxAmount = getTaxAmount(fixedTaxes.highTax, annualSalary, taxableIncome.highSalary, variableTaxes.highVarTax);
+				break;
+			case (annualSalary > (taxableIncome.mediumSalary + 1) && annualSalary <= taxableIncome.highSalary):
+				taxAmount = getTaxAmount(fixedTaxes.mediumTax, annualSalary, taxableIncome.mediumSalary, variableTaxes.mediumVarTax);
+				break;
+			case (annualSalary > (taxableIncome.midLowSalary + 1) && annualSalary <= taxableIncome.mediumSalary):
+				taxAmount = getTaxAmount(fixedTaxes.lowTax, annualSalary, taxableIncome.midLowSalary, variableTaxes.midLowVarTax);
+				break;
+			case (annualSalary > taxableIncome.lowSalary && annualSalary <= taxableIncome.midLowSalary):
+				taxAmount = getTaxAmount(0, annualSalary, taxableIncome.lowSalary, variableTaxes.lowVarTax);
+				break;
+			default:
+				taxAmount = variableTaxes.noTax;
+				break;
+		}
 
 	return taxAmount;
+}
+
+function getTaxAmount(fixedTax, annualSalary, taxableIncome, varTax) {
+	return (fixedTax + (annualSalary - taxableIncome) * varTax)/periodicMonths;
 }
 
 /**

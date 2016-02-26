@@ -8,26 +8,28 @@ function createOutputData(employeeList){
 
 	employeeData = employeeList;
 	outputData = convertToCSVFile();
+	showOutputData();
 	createDownloadLink(outputData);
 }
 
 function createDownloadLink(outputData) {
-	var data, filename, link;
+	var data, 
+		filename,
+		link,
+		linkNodeText;
 
-	filename = 'outputPaySlip.csv';
+	filename = 'outputDataPaySlip.csv';
 
 	if (!outputData.match(/^data:text\/csv/i)) {
-		outputData = 'data:text/csv;charset=utf-8,' + outputData;
+		outputData = 'data:application/csv;charset=utf-8,' + encodeURI(outputData);
 	}
 
-	data = encodeURI(outputData);
-
 	link = document.createElement('a');
-	link.setAttribute('href', data);
+	link.setAttribute('href', outputData);
 	link.setAttribute('download', filename);
-	link.click();
-	/*var node = document.getElementById('output');
-	 node.text = link;*/
+	linkNodeText = document.createTextNode("Click on this link if you want to download the csv document");
+	 link.appendChild(linkNodeText);
+	 document.body.appendChild(link);
 }
 
 function convertToCSVFile() {
@@ -51,3 +53,4 @@ function convertToCSVFile() {
 function getFullName(employee){
 	return employee.firstName.concat(' ').concat(employee.lastName);
 }
+
