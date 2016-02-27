@@ -5,38 +5,40 @@
  */
 
 /**
- * Global variable that store the data for all employees
- */
-var employeeData;
-
-/**
  * This is the responsible to open and load the data from the file. After load the file, the resulted string is parsed,
  * so all the data is converted into the proper structure that allows the system do all the operations.
- * @param event
+ * After all the calculations are done, the system show the output data
+ * @param event Event which is launched when the file is loaded.
  */
 function openFile(event){
 
-	var input = event.target;
+	var employeeData,
+        inputFile,
+        inputData;
 
-    if(input.files[0].name.split('.').pop() == 'csv')
+    inputFile = event.target.files[0];
+    if(inputFile.name.split('.').pop() == 'csv')
     {
         var reader = new FileReader();
         reader.onload = function(){
-            parseFile(reader.result);
+            inputData = reader.result;
+            employeeData = parseFile(inputData);
+            calculatePayslip(employeeData);
         };
-        reader.readAsText(input.files[0]);
+        reader.readAsText(inputFile);
     } else {
         alert('The file must have .csv extension');
     }
 }
 
 /**
- * Parses the text passed as parameter. In this function the system prepare the data, parsing to the proper structure
- * and calculate all the data. After all the operations are done, the system show the output data.
+ * Parses the text passed as parameter. In this function the system prepare the data, parsing to the proper structure.
  * @param text Text read from the input file.
+ * @returns {Array} Array with the input data parsed in employee objects.
  */
 function parseFile(text){
-	var record,
+	var employeeData,
+		record,
 		indexRecord,
 		indexEmployee,
 		fields;
@@ -53,5 +55,5 @@ function parseFile(text){
 		}
 	}
 
-	calculatePayslip(employeeData);
+    return employeeData;
 }
