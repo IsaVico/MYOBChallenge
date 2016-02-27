@@ -58,7 +58,7 @@ describe("When loading and parsing input file", function() {
             expect(employeeListData[0].validEmployee).toBe(false);
         });
 
-        it("the code must be properly parsed if the text is not correct (not all the fields are filled", function() {
+        it("the code must be properly parsed if the text is not correct (not all the fields are filled)", function() {
             text = '9%,01 March – 31 March\nRyan,Chen,120000,10%,01 March – 31 March';
             employeeListData = parseFile(text);
             expect(employeeListData[0].firstName).toEqual('Not the correct input data filled. The record is not processed');
