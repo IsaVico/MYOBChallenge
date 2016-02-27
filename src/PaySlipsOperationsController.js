@@ -4,12 +4,7 @@
  */
 
 /**
- * Global variable that store the data for all employees
- */
-var employeeData;
-
-/**
- * This function do all the operations to get the output data. In this function the system gets the data from the
+ * This function does all the operations to get the output data. In this function the system gets the data from the
  * input data and create the output data.
  * @param employeeList List of employee that is going to be processed
  */
@@ -17,18 +12,16 @@ function calculatePayslip(employeeList) {
 	var currentEmployee,
 		i;
 
-	employeeData = employeeList;
-
-	for(i=0; i< employeeData.length; i++) {
-		if(employeeData[i].validEmployee){
-			currentEmployee = employeeData[i];
-			currentEmployee.grossIncome = Math.round(currentEmployee.annualSalary/periodicMonths);
+	for(i=0; i< employeeList.length; i++) {
+		if(employeeList[i].validEmployee){
+			currentEmployee = employeeList[i];
+			currentEmployee.grossIncome = Math.round(currentEmployee.annualSalary/numberOfPaymentsPerYear);
 			currentEmployee.superMonthly = Math.round(calculateSuper(currentEmployee));
 			currentEmployee.incomeTax = Math.round(calculateTaxes(currentEmployee));
 			currentEmployee.netIncome = calculateNetIncome(currentEmployee);
 		}
 	}
-	createOutputData(employeeData);
+	createOutputData(employeeList);
 }
 
 /**
@@ -52,13 +45,13 @@ function calculateTaxes(employee) {
 	annualSalary = employee.annualSalary;
 
 	switch (true) {
-		case (annualSalary > (taxableIncome.highSalary + 1)):
+		case (annualSalary > (taxableIncome.highSalary)):
 			taxAmount = getTaxAmount(fixedTaxes.highTax, annualSalary, taxableIncome.highSalary, variableTaxes.highVarTax);
 			break;
-		case (annualSalary > (taxableIncome.mediumSalary + 1) && annualSalary <= taxableIncome.highSalary):
+		case (annualSalary > (taxableIncome.mediumSalary) && annualSalary <= taxableIncome.highSalary):
 			taxAmount = getTaxAmount(fixedTaxes.mediumTax, annualSalary, taxableIncome.mediumSalary, variableTaxes.mediumVarTax);
 			break;
-		case (annualSalary > (taxableIncome.midLowSalary + 1) && annualSalary <= taxableIncome.mediumSalary):
+		case (annualSalary > (taxableIncome.midLowSalary) && annualSalary <= taxableIncome.mediumSalary):
 			taxAmount = getTaxAmount(fixedTaxes.lowTax, annualSalary, taxableIncome.midLowSalary, variableTaxes.midLowVarTax);
 			break;
 		case (annualSalary > taxableIncome.lowSalary && annualSalary <= taxableIncome.midLowSalary):
@@ -81,7 +74,7 @@ function calculateTaxes(employee) {
  * @returns {number} Returns the amount of the taxes that the employee is going to pay.
  */
 function getTaxAmount(fixedTax, annualSalary, taxableIncome, varTax) {
-	return (fixedTax + (annualSalary - taxableIncome) * varTax)/periodicMonths;
+	return (fixedTax + (annualSalary - taxableIncome) * varTax)/numberOfPaymentsPerYear;
 }
 
 /**

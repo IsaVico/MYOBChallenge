@@ -4,11 +4,6 @@
  */
 
 /**
- * Global variable that store the data for all employees
- */
-var employeeData;
-
-/**
  * Creates a new employee object with the proper data from the fields read from the file.
  * @param fields Fields read from the input file
  * @returns {Object} Returns the employee object created
@@ -47,7 +42,7 @@ function prepareEmployeeData(fields){
 }
 
 /**
- * Gets the proper error message depending of the fields. If there not exists enough data (the input data is not correct
+ * Gets the proper error message depending of the fields. If there not exists enough data (the input data is not correct)
  * the system informs the user that the record is not processed. If the mandatory items are not filled the operations
  * cannot be done, so the system informs the user.
  * @param fields Fields read from the file
@@ -74,7 +69,7 @@ function clearNewLineCharacters(originalString) {
 }
 
 /**
- * Checks if the number of input data is correct. If the system found less than five fields show an error to the user
+ * Checks if the number of input data is correct. If the system found less than five fields then it shows an error to the user.
  * @param fields Fields read from the file.
  * @returns {boolean} Returns true if the number of data in the file are correct, false otherwise.
  */

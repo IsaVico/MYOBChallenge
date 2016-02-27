@@ -1,12 +1,12 @@
 /**
  * @author Isabel Vico Peinado [isabel.vico.peinado@gmail.com]
- * This class is the responsible of built the output table. It is built in HTML language and show the results
+ * This class is the responsible of build the output table. It is built in HTML language and show the results
  * after do all the necessary operations to get the requested data.
  */
 
 /**
  * This is the responsible to open and load the data from the file. After load the file, the resulted string is parsed,
- * so all the data is converted into the proper structure that allows the system do all the operations.
+ * so all the data is converted into the proper structure that allows the system to do all the operations.
  * After all the calculations are done, the system show the output data
  * @param event Event which is launched when the file is loaded.
  */

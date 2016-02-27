@@ -3,10 +3,11 @@
 * This class is the responsible to test the functionality implemented in OutputFileController.
 */
 describe("When creating the Output file", function() {
-var employee;
+var employeeList,
+    showOutputDataSpy;
 
 	beforeEach(function() {
-		employee = {
+        employeeList = [{
 				firstName: 'David',
 				lastName: 'Rudd',
 				annualSalary: 60050,
@@ -17,33 +18,32 @@ var employee;
 				netIncome: 4082,
 				superMonthly: 450,
 				validEmployee: true
-		};
-	});
-
-	afterEach(function() {
-		employeeData = undefined;
+		}];
+        showOutputDataSpy = spyOn(window, 'showOutputData');
 	});
 
 	it("it must call to convertToCSVFile", function() {
 		var convertToCSVFileSpy = spyOn(window, 'convertToCSVFile');
 		spyOn(window, 'createDownloadLink');
-		createOutputData(employee);
+		createOutputData(employeeList);
 		expect(convertToCSVFileSpy).toHaveBeenCalled();
 	});
 
 	it("it must call to createDownloadLink", function() {
 		var createDownloadLinkSpy = spyOn(window, 'createDownloadLink');
 		spyOn(window, 'convertToCSVFile');
-		createOutputData(employee);
+		createOutputData(employeeList);
 		expect(createDownloadLinkSpy).toHaveBeenCalled();
 	});
+
+    it("it must call to showOutputData", function() {
+        createOutputData(employeeList);
+        expect(showOutputDataSpy).toHaveBeenCalled();
+    });
 
 	it("the output data must be correct", function() {
 		var expectedOutput;
 		expectedOutput = 'David Rudd,01 March - 31 March,5004,922,4082,450';
-		employeeData = [
-			employee
-		];
-		expect(convertToCSVFile()).toBe(expectedOutput.concat('\n'));
+		expect(convertToCSVFile(employeeList)).toBe(expectedOutput.concat('\n'));
 	});
 });

@@ -22,14 +22,14 @@ describe("When calculating the amounts", function() {
 		assertEmployeeFields(expectedEmployee, 'Rudd');
 	});
 
-	it("prepareEmployeeData must have in account one employee if it have one of the non mandatory fields filled", function (){
+	it("prepareEmployeeData must have into account one employee if it have one of the non mandatory fields filled", function (){
 		var expectedEmployee;
 		employeeFields[1] = '';
 		expectedEmployee = prepareEmployeeData(employeeFields);
 		assertEmployeeFields(expectedEmployee, '');
 	});
 
-	it("prepareEmployeeData must not have in account one employee if it have not all the mandatory fields", function (){
+	it("prepareEmployeeData must not have into account one employee if it have not all the mandatory fields", function (){
 		var expectedEmployee;
 		employeeFields[2] = '';
 		expectedEmployee = prepareEmployeeData(employeeFields);

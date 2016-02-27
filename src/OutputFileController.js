@@ -5,11 +5,6 @@
  */
 
 /**
- * Global variable that store the data for all employees
- */
-var employeeData;
-
-/**
  * This is the function responsible to create the table show in the HTML and the link to download the data into a
  * csv file.
  * @param employeeList List of employees. This list contains all the data that is going to be shown to the user.
@@ -17,14 +12,13 @@ var employeeData;
 function createOutputData(employeeList){
 	var outputData;
 
-	employeeData = employeeList;
-	outputData = convertToCSVFile();
-	showOutputData();
+	outputData = convertToCSVFile(employeeList);
+	showOutputData(employeeList);
 	createDownloadLink(outputData);
 }
 
 /**
- * Creates the link to download the csv file with the data show in the data.
+ * Creates the link to download the csv file with the data show in the table.
  * @param outputData Is the string with al the data. This is going to be wrote in the file in case the user wants to
  * keep the information in a csv file.
  */
@@ -50,9 +44,10 @@ function createDownloadLink(outputData) {
 
 /**
  * Converts all the information stored in the list of employees to a string, in order to write in a csv file.
+ * @param employeeList List of employees. This list contains all the data that is going to be shown to the user.
  * @returns {string} The data with the csv format prepared to write it in a csv file if the user download the link.
  */
-function convertToCSVFile() {
+function convertToCSVFile(employeeList) {
 	var outputData,
 		fieldDelimiter,
 		recordDelimiter;
@@ -61,7 +56,7 @@ function convertToCSVFile() {
 	fieldDelimiter= ',';
 	recordDelimiter = '\n';
 
-	employeeData.forEach(function(employee) {
+	employeeList.forEach(function(employee) {
 		var name;
 
 		name = employee.firstName.concat(' ').concat(employee.lastName);

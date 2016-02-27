@@ -7,14 +7,14 @@
 /**
  * Is the responsible of creates the table with the output data and embed it into the HTML code to show them to the user.
  */
-function showOutputData(){
+function showOutputData(employeeList){
     var table = document.createElement('table'),
         employee,
         employeeIndex;
 
     table.appendChild(createHeaderRow());
-    for ( employeeIndex = 0; employeeIndex < employeeData.length; employeeIndex++){
-        employee = employeeData[employeeIndex];
+    for ( employeeIndex = 0; employeeIndex < employeeList.length; employeeIndex++){
+        employee = employeeList[employeeIndex];
         table.appendChild(createRow(employee));
     }
     document.body.appendChild(table);

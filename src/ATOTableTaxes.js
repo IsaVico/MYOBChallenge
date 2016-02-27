@@ -55,5 +55,5 @@ const variableTaxes = {
  * <pre>Usually the number of months consider in the business period is 12.</pre>
  * @type {number}
  */
-const periodicMonths = 12;
+const numberOfPaymentsPerYear = 12;
 
