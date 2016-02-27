@@ -10,7 +10,6 @@
 var employeeData;
 
 /**
- * @public
  * This is the responsible to open and load the data from the file. After load the file, the resulted string is parsed,
  * so all the data is converted into the proper structure that allows the system do all the operations.
  * @param event
@@ -19,15 +18,19 @@ function openFile(event){
 
 	var input = event.target;
 
-	var reader = new FileReader();
-	reader.onload = function(){
-		parseFile(reader.result);
-	};
-	reader.readAsText(input.files[0]);
+    if(input.files[0].name.split('.').pop() == 'csv')
+    {
+        var reader = new FileReader();
+        reader.onload = function(){
+            parseFile(reader.result);
+        };
+        reader.readAsText(input.files[0]);
+    } else {
+        alert('The file must have .csv extension');
+    }
 }
 
 /**
- * @private
  * Parses the text passed as parameter. In this function the system prepare the data, parsing to the proper structure
  * and calculate all the data. After all the operations are done, the system show the output data.
  * @param text Text read from the input file.

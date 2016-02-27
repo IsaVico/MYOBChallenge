@@ -5,7 +5,6 @@
  */
 
 /**
- * @public
  * Is the responsible of creates the table with the output data and embed it into the HTML code to show them to the user.
  */
 function showOutputData(){
@@ -22,7 +21,6 @@ function showOutputData(){
 }
 
 /**
- * @private
  * Creates the row for an employee with the data in the object.
  * @param employee Object that contains all the data to show.
  * @returns {Element} Returns the HTML DOM TableRow Object with the data to show.
@@ -42,7 +40,6 @@ function createRow(employee){
 }
 
 /**
- * @private
  * Creates the header row with the headers to show in the table.
  * @returns {Element} Returns the HTML DOM TableRow Object with the headers.
  */
@@ -61,7 +58,6 @@ function createHeaderRow(){
 }
 
 /**
- * @private
  * Appends one column to the row. The column contains the text passed by parameter.
  * @param row The HTML DOM TableRow Object where the column is going to be appended.
  * @param textNode String with the text show in the column.

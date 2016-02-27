@@ -3,12 +3,6 @@
  * This class is the responsible to test the functionality implemented in InputFileController
  */
 describe("When loading and parsing input file", function() {
-	describe("When opening file", function() {
-		/*it("the file must call parseFile", function() {
-
-		 });*/
-	});
-
 	describe("When parsing file", function() {
 		var text;
 
