@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/OutputFileController.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#appendColumn">appendColumn</a></li><li><a href="global.html#calculateNetIncome">calculateNetIncome</a></li><li><a href="global.html#calculatePayslip">calculatePayslip</a></li><li><a href="global.html#calculateSuper">calculateSuper</a></li><li><a href="global.html#calculateTaxes">calculateTaxes</a></li><li><a href="global.html#clearNewLineCharacters">clearNewLineCharacters</a></li><li><a href="global.html#convertToCSVFile">convertToCSVFile</a></li><li><a href="global.html#createDownloadLink">createDownloadLink</a></li><li><a href="global.html#createHeaderRow">createHeaderRow</a></li><li><a href="global.html#createOutputData">createOutputData</a></li><li><a href="global.html#createRow">createRow</a></li><li><a href="global.html#fixedTaxes">fixedTaxes</a></li><li><a href="global.html#getErrorMessage">getErrorMessage</a></li><li><a href="global.html#getTaxAmount">getTaxAmount</a></li><li><a href="global.html#isAllMandatoryDataFilled">isAllMandatoryDataFilled</a></li><li><a href="global.html#isCorrectInputData">isCorrectInputData</a></li><li><a href="global.html#numberOfPaymentsPerYear">numberOfPaymentsPerYear</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#parseFile">parseFile</a></li><li><a href="global.html#prepareEmployeeData">prepareEmployeeData</a></li><li><a href="global.html#showOutputData">showOutputData</a></li><li><a href="global.html#taxableIncome">taxableIncome</a></li><li><a href="global.html#variableTaxes">variableTaxes</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/OutputFileController.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @author Isabel Vico Peinado [isabel.vico.peinado@gmail.com]
+ * This class is the responsible of convert the data to CSV file format, built the output file and
+ * create the link to download the file.
+ */
+
+/**
+ * This is the function responsible to create the table show in the HTML and the link to download the data into a
+ * csv file.
+ * @param employeeList List of employees. This list contains all the data that is going to be shown to the user.
+ */
+function createOutputData(employeeList){
+	var outputData;
+
+	outputData = convertToCSVFile(employeeList);
+	showOutputData(employeeList);
+	createDownloadLink(outputData);
+}
+
+/**
+ * Creates the link to download the csv file with the data show in the table.
+ * @param outputData Is the string with al the data. This is going to be wrote in the file in case the user wants to
+ * keep the information in a csv file.
+ */
+function createDownloadLink(outputData) {
+	var data,
+		filename,
+		link,
+		linkNodeText;
+
+    linkNodeText = 'Click on this link if you want to download the csv document';
+	filename = 'outputDataPaySlip.csv';
+
+	if (!outputData.match(/^data:text\/csv/i)) {
+		outputData = 'data:application/csv;charset=utf-8,' + encodeURI(outputData);
+	}
+
+	link = document.createElement('a');
+	link.setAttribute('href', outputData);
+	link.setAttribute('download', filename);
+	link.appendChild(document.createTextNode(linkNodeText));
+	document.body.appendChild(link);
+}
+
+/**
+ * Converts all the information stored in the list of employees to a string, in order to write in a csv file.
+ * @param employeeList List of employees. This list contains all the data that is going to be shown to the user.
+ * @returns {string} The data with the csv format prepared to write it in a csv file if the user download the link.
+ */
+function convertToCSVFile(employeeList) {
+	var outputData,
+		fieldDelimiter,
+		recordDelimiter;
+
+	outputData = '';
+	fieldDelimiter= ',';
+	recordDelimiter = '\n';
+
+	employeeList.forEach(function(employee) {
+		var name;
+
+		name = employee.firstName.concat(' ').concat(employee.lastName);
+		outputData = outputData.concat(name).concat(fieldDelimiter).concat(employee.payPeriod).concat(fieldDelimiter).concat(employee.grossIncome).concat(fieldDelimiter).concat(employee.incomeTax).concat(fieldDelimiter).concat(employee.netIncome).concat(fieldDelimiter).concat(employee.superMonthly).concat(recordDelimiter);
+	});
+	return outputData;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Feb 27 2016 21:51:15 GMT+1100 (Hora de verano este, Australia) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

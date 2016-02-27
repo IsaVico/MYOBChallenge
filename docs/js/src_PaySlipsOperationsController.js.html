@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/PaySlipsOperationsController.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#appendColumn">appendColumn</a></li><li><a href="global.html#calculateNetIncome">calculateNetIncome</a></li><li><a href="global.html#calculatePayslip">calculatePayslip</a></li><li><a href="global.html#calculateSuper">calculateSuper</a></li><li><a href="global.html#calculateTaxes">calculateTaxes</a></li><li><a href="global.html#clearNewLineCharacters">clearNewLineCharacters</a></li><li><a href="global.html#convertToCSVFile">convertToCSVFile</a></li><li><a href="global.html#createDownloadLink">createDownloadLink</a></li><li><a href="global.html#createHeaderRow">createHeaderRow</a></li><li><a href="global.html#createOutputData">createOutputData</a></li><li><a href="global.html#createRow">createRow</a></li><li><a href="global.html#fixedTaxes">fixedTaxes</a></li><li><a href="global.html#getErrorMessage">getErrorMessage</a></li><li><a href="global.html#getTaxAmount">getTaxAmount</a></li><li><a href="global.html#isAllMandatoryDataFilled">isAllMandatoryDataFilled</a></li><li><a href="global.html#isCorrectInputData">isCorrectInputData</a></li><li><a href="global.html#numberOfPaymentsPerYear">numberOfPaymentsPerYear</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#parseFile">parseFile</a></li><li><a href="global.html#prepareEmployeeData">prepareEmployeeData</a></li><li><a href="global.html#showOutputData">showOutputData</a></li><li><a href="global.html#taxableIncome">taxableIncome</a></li><li><a href="global.html#variableTaxes">variableTaxes</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/PaySlipsOperationsController.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @author Isabel Vico Peinado [isabel.vico.peinado@gmail.com]
+ * This class is responsible of do the necessary operations to get the output data.
+ */
+
+/**
+ * This function does all the operations to get the output data. In this function the system gets the data from the
+ * input data and create the output data.
+ * @param employeeList List of employee that is going to be processed
+ */
+function calculatePayslip(employeeList) {
+	var currentEmployee,
+		i;
+
+	for(i=0; i&lt; employeeList.length; i++) {
+		if(employeeList[i].validEmployee){
+			currentEmployee = employeeList[i];
+			currentEmployee.grossIncome = Math.round(currentEmployee.annualSalary/numberOfPaymentsPerYear);
+			currentEmployee.superMonthly = Math.round(calculateSuper(currentEmployee));
+			currentEmployee.incomeTax = Math.round(calculateTaxes(currentEmployee));
+			currentEmployee.netIncome = calculateNetIncome(currentEmployee);
+		}
+	}
+	createOutputData(employeeList);
+}
+
+/**
+ * Calculates the superRate which is the result of multiplied the gross monthly income and the super rate.
+ * @param employee Object that represent the employee whose is going to get the super income.
+ * @returns {number} Returns the super rate amount per month.
+ */
+function calculateSuper(employee){
+	return employee.grossIncome * (parseInt(employee.superRate) / 100);
+}
+
+/**
+ * Calculates the taxes based on the annual salary and the ATO table
+ * @param employee Object that represent the employee whose is going to get the taxes payed.
+ * @returns {number} Return the amount of taxes that the user needs to pay per month.
+ */
+function calculateTaxes(employee) {
+	var taxAmount,
+		annualSalary;
+
+	annualSalary = employee.annualSalary;
+
+	switch (true) {
+		case (annualSalary > (taxableIncome.highSalary)):
+			taxAmount = getTaxAmount(fixedTaxes.highTax, annualSalary, taxableIncome.highSalary, variableTaxes.highVarTax);
+			break;
+		case (annualSalary > (taxableIncome.mediumSalary) &amp;&amp; annualSalary &lt;= taxableIncome.highSalary):
+			taxAmount = getTaxAmount(fixedTaxes.mediumTax, annualSalary, taxableIncome.mediumSalary, variableTaxes.mediumVarTax);
+			break;
+		case (annualSalary > (taxableIncome.midLowSalary) &amp;&amp; annualSalary &lt;= taxableIncome.mediumSalary):
+			taxAmount = getTaxAmount(fixedTaxes.lowTax, annualSalary, taxableIncome.midLowSalary, variableTaxes.midLowVarTax);
+			break;
+		case (annualSalary > taxableIncome.lowSalary &amp;&amp; annualSalary &lt;= taxableIncome.midLowSalary):
+			taxAmount = getTaxAmount(0, annualSalary, taxableIncome.lowSalary, variableTaxes.lowVarTax);
+			break;
+		default:
+			taxAmount = variableTaxes.noTax;
+			break;
+	}
+
+	return taxAmount;
+}
+
+/**
+ * Get the tax amount with the given data.
+ * @param fixedTax Amount that represents the fixed taxes to pay from the ATO Table data.
+ * @param annualSalary Salary of the employee, this amount is gotten from the input data filled.
+ * @param taxableIncome Amount that represents the range which is going to taking in account to calculate the tax amount.
+ * @param varTax Amount that represents the variable taxes which is going to taking in account to calculate the tax amount.
+ * @returns {number} Returns the amount of the taxes that the employee is going to pay.
+ */
+function getTaxAmount(fixedTax, annualSalary, taxableIncome, varTax) {
+	return (fixedTax + (annualSalary - taxableIncome) * varTax)/numberOfPaymentsPerYear;
+}
+
+/**
+ * Calculates the net income which is the result of subtract to the gross monthly income the monthly taxes.
+ * @param employee Object that represent the employee whose is going to get the the income received.
+ * @returns Return the super rate amount per month.
+ */
+function calculateNetIncome(employee) {
+	return employee.grossIncome - employee.incomeTax;
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Feb 27 2016 21:51:15 GMT+1100 (Hora de verano este, Australia) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
