@@ -1,8 +1,9 @@
 /**
- * Created by Isabel on 26/02/2016.
+ * @author Isabel Vico Peinado [isabel.vico.peinado@gmail.com]
+ * This class is the responsible to test the functionality implemented in PaySlipsOperationsController
  */
 describe("When calculating the amounts", function() {
- var employeeFields;
+	var employeeFields;
 	beforeEach(function() {
 		employeeFields = ['David','Rudd','60050','9%','01 March - 31 March'];
 	});
@@ -32,39 +33,21 @@ describe("When calculating the amounts", function() {
 		var expectedEmployee;
 		employeeFields[2] = '';
 		expectedEmployee = prepareEmployeeData(employeeFields);
-		expect(expectedEmployee.lastName).toBeUndefined();
+		expect(expectedEmployee.lastName).toBe('');
 	});
 
-	it("allMandatoryDataFilled must return true if the mandatory data are filled", function() {
-		var expectedAllMandatoryDataFilled;
+	it("isAllMandatoryDataFilled must return true if the mandatory data are filled", function() {
+		var expectedIsAllMandatoryDataFilled;
 
-		expectedAllMandatoryDataFilled = allMandatoryDataFilled(employeeFields);
-		expect(expectedAllMandatoryDataFilled).toBe(true);
+		expectedIsAllMandatoryDataFilled = isAllMandatoryDataFilled(employeeFields);
+		expect(expectedIsAllMandatoryDataFilled).toBe(true);
 	});
 
-	it("allMandatoryDataFilled must return false if the mandatory data are  not filled", function() {
-		var expectedAllMandatoryDataFilled;
+	it("isAllMandatoryDataFilled must return false if the mandatory data are  not filled", function() {
+		var expectedIsAllMandatoryDataFilled;
 		employeeFields[2] = '';
-		expectedAllMandatoryDataFilled = allMandatoryDataFilled(employeeFields);
-		expect(expectedAllMandatoryDataFilled).toBe(false);
-	});
-
-	it("isValidEmployee must return true if the the employee has not errors", function() {
-		var employee,
-			validEmployee;
-		employee = prepareEmployeeData(employeeFields);
-		validEmployee = isValidEmployee(employee);
-		expect(validEmployee).toBe(true);
-	});
-
-	it("isValidEmployee must return false if the the employee has errors", function() {
-		var employee,
-			validEmployee;
-
-		employeeFields[2] = '';
-		employee = prepareEmployeeData(employeeFields);
-		validEmployee = isValidEmployee(employee);
-		expect(validEmployee).toBe(false);
+		expectedIsAllMandatoryDataFilled = isAllMandatoryDataFilled(employeeFields);
+		expect(expectedIsAllMandatoryDataFilled).toBe(false);
 	});
 
 	describe("CalculatePayslip function", function (){

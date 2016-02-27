@@ -1,5 +1,6 @@
 /**
- * Created by Isabel on 26/02/2016.
+ * @author Isabel Vico Peinado [isabel.vico.peinado@gmail.com]
+ * This class is the responsible to test the functionality implemented in InputFileController
  */
 describe("When loading and parsing input file", function() {
 	describe("When opening file", function() {

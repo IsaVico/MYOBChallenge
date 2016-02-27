@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="style-sheet.css">
+
+    <title>MYOB Challenge</title>
+
+    <link rel="stylesheet" type="text/css" href="./resources/style-sheet.css">
+    <script type="text/javascript" src="./src/EmployeeDataController.js"></script>
     <script type="text/javascript" src="./src/InputFileController.js"></script>
     <script type="text/javascript" src="./src/PaySlipsOperationsController.js"></script>
     <script type="text/javascript" src="./src/OutputFileController.js"></script>
-	<script type="text/javascript" src="./src/ATOTableTaxes.js"></script>
-	<script type="text/javascript" src="./src/TableBuilder.js"></script>
+    <script type="text/javascript" src="./src/ATOTableTaxes.js"></script>
+    <script type="text/javascript" src="./src/TableBuilder.js"></script>
 </head>
 <body style="text-align:center">
-    <div>
-        <img src="myob_logo.png" alt="MYOB Logo"><br><br><br>
-    </div>
-    Select a csv file with the data to get the results:<br><br>
-    <input type='file' onchange='openFile(event)'><br><br><br>
+<div>
+    <img src="./resources/myob_logo.png" alt="MYOB Logo"><br><br><br>
+</div>
+Select a csv file with the data to get the results:<br><br>
+<input type='file' onchange='openFile(event)'><br><br><br>
 </body>
 </html>
